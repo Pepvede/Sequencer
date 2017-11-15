@@ -26,8 +26,10 @@ namespace Esborrany_1
             {
                 Nota = Convert.ToInt32(beat[i]);
                 Frecuencia = ObtenerFrecuencia(Nota,Octava);
-                Console.Beep((int)Frecuencia, bpm);
-                System.Threading.Thread.Sleep(bpm);
+                if(Nota!=0)
+                    Console.Beep((int)Frecuencia, bpm);
+                else
+                    System.Threading.Thread.Sleep(bpm);
                 i++;
             }
         }
