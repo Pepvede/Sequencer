@@ -4,3 +4,9 @@ C:\Users\Pepv\Documents\Estudis\Ing. Telemàtica\Introducció als Ordinadors\Pro
 C:\Users\Pepv\Documents\Estudis\Ing. Telemàtica\Introducció als Ordinadors\Projecte\Esborrany 1\Esborrany 1\Esborrany 1\obj\Debug\Esborrany 1.csprojResolveAssemblyReference.cache
 C:\Users\Pepv\Documents\Estudis\Ing. Telemàtica\Introducció als Ordinadors\Projecte\Esborrany 1\Esborrany 1\Esborrany 1\obj\Debug\Esborrany 1.exe
 C:\Users\Pepv\Documents\Estudis\Ing. Telemàtica\Introducció als Ordinadors\Projecte\Esborrany 1\Esborrany 1\Esborrany 1\obj\Debug\Esborrany 1.pdb
+C:\Users\Pepv\Desktop\Sequencer - Còpia\Esborrany 1\bin\Debug\Esborrany 1.exe.config
+C:\Users\Pepv\Desktop\Sequencer - Còpia\Esborrany 1\bin\Debug\Esborrany 1.exe
+C:\Users\Pepv\Desktop\Sequencer - Còpia\Esborrany 1\bin\Debug\Esborrany 1.pdb
+C:\Users\Pepv\Desktop\Sequencer - Còpia\Esborrany 1\obj\Debug\Esborrany 1.csprojResolveAssemblyReference.cache
+C:\Users\Pepv\Desktop\Sequencer - Còpia\Esborrany 1\obj\Debug\Esborrany 1.exe
+C:\Users\Pepv\Desktop\Sequencer - Còpia\Esborrany 1\obj\Debug\Esborrany 1.pdb
