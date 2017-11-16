@@ -9,9 +9,11 @@ namespace Esborrany_1
 {
     class Program
     {
-        static double ObtenerFrecuencia(double nota, double octava)
+        static double ObtenerFrecuencia(int nota, int octava)
         {
-            return (440.0 * Math.Exp(((octava - 4) + (nota - 10) / 12.0) * Math.Log(2)));
+            double ayudante=(octava-4)*12+(nota-10);
+            ayudante=Math.Pow(2,ayudante/12);
+            return(440.0*ayudante);
         }
         static void Main(string[] args)
         {
@@ -20,8 +22,8 @@ namespace Esborrany_1
             fila = F.ReadLine();
             F.Close();
             string[] beat = fila.Split('.');
-            int i = 0, bpm=150;
-            double Frecuencia = 0, Nota=0.0, Octava=4.0;
+            int i = 0, bpm=429, Octava=4, Nota=0;
+            double Frecuencia = 0;
             while (i<beat.Length)
             {
                 Nota = Convert.ToInt32(beat[i]);
