@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Esborrany 1"
+    "\\Esborrany 1",
+    "\\Esborrany 1\\bin",
+    "\\Esborrany 1\\bin\\Debug"
   ],
   "SelectedNode": "\\Esborrany 1\\Program.cs",
   "PreviewInSolutionExplorer": false
