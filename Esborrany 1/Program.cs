@@ -15,23 +15,119 @@ namespace Esborrany_1
             public string Ubicacio;
             public string ID;
         }
+
         public class CListaPartituras
         {
             public CPartitura[] ListaPartituras;
         }
 
+        //Función para obtener las frecuencias
         static double ObtenerFrecuencia(int nota, int octava)
         {
             double auxiliar=(octava-4)*12+(nota-10);
             auxiliar=Math.Pow(2, auxiliar / 12);
             return(440.0* auxiliar);
         }
+
+        static void Partitura_Editar(string[] beat, int j, int k, string NumNota_1, string NumNota_2, int J)
+        {
+            int i = 0;
+
+            while (i < beat.Length)
+            {
+                if ((j == J) && (k == i))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write('X');
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                else if (beat[i] == NumNota_1)
+                {
+                    Console.Write('#');
+                }
+                else if (beat[i] == NumNota_2)
+                {
+                    Console.Write('o');
+                }
+                else if (J%2==0)
+                    Console.Write(" ");
+                else
+                    Console.Write("-");
+                i++;
+            }
+                Console.Write("\n");
+        }
+
+        static void Partitura_Reproducir(string[] beat, int I, int Nota, string NumNota_1, string NumNota_2, int J_1, int J_2, bool Espacio)
+        {
+            int i = 0;
+
+            while (i < beat.Length)
+            {
+                if ((Nota == J_1) && (beat[i] == NumNota_1) && (I == i))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write('#');
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                else if ((Nota == J_2) && (beat[i] == NumNota_2) && (I == i))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write('O');
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                else if (Espacio)
+                    Console.Write(" ");
+                else
+                    Console.Write("-");
+                i++;
+            }
+            Console.Write("\n");
+        }
+
+        static int SeleccionMenu(string[] dirs,int Selector, CListaPartituras Partituras)
+        {
+            bool Seleccionado = false;
+            int ContadorOpciones = 0;
+
+            while (!Seleccionado)
+            {
+                Console.Clear();
+                while (ContadorOpciones < dirs.Length)
+                {
+                    if (Selector == ContadorOpciones)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                    }
+                    Console.WriteLine(Partituras.ListaPartituras[ContadorOpciones].Nom);
+                    Console.ForegroundColor = ConsoleColor.White;
+                    ContadorOpciones++;
+                }
+                ContadorOpciones = 0;
+
+                ConsoleKeyInfo EntradaUsuario = Console.ReadKey();
+                if ((EntradaUsuario.KeyChar == 'w') && (Selector > 0))
+                {
+                    Selector--;
+                }
+                if ((EntradaUsuario.KeyChar == 's') && (Selector < dirs.Length - 1))
+                {
+                    Selector++;
+                }
+                if (EntradaUsuario.Key == ConsoleKey.Spacebar)
+                {
+                    Seleccionado = true;
+                }
+            }
+            return (Selector);
+        }
+
         static void Main(string[] args)
         {
-            int i = 0, bpm=300, Octava=4, Nota=0, I=0, Menu, IniciApp=0, j = 0, k = 0, Selector = 0, ContadorOpciones = 0;
+            int i = 0, bpm=300, Octava=4, Nota=0, I=0, Menu, IniciApp=0, j = 0, k = 0, Selector = 0, J=0, J_1=0, J_2=0;
             double Frecuencia = 0;
-            string ID, Nom, fila;
-            bool Sortir = false, Seleccionado = false, Salir=false;
+            string ID, Nom, fila, NumNota_1, NumNota_2;
+            bool Sortir = false, Salir=false, Espacio=false;
 
             string[] dirs = Directory.GetFiles(@".\", "*.txt");
             CListaPartituras Partituras = new CListaPartituras();
@@ -52,12 +148,10 @@ namespace Esborrany_1
 
 
 
-            while (!Salir)
-            {
+            //while (!Salir)
+            //{
                 Menu = 0;
                 Selector = 0;
-                ContadorOpciones = 0;
-                Seleccionado = false;
                 Sortir = false;
                 j = 0;
                 k = 0;
@@ -93,42 +187,14 @@ namespace Esborrany_1
 
                     case 2:
                         Selector = 0;
-                        ContadorOpciones =0;
-                        Seleccionado = false;
                         if (dirs.Length==0)
                         {
                             Console.WriteLine("Todavía no existe ninguna partitura");
                         }
                         else
                         {
-                            while (!Seleccionado)
-                            {
-                                Console.Clear();
-                                while (ContadorOpciones<dirs.Length) {
-                                    if (Selector == ContadorOpciones)
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                    }
-                                    Console.WriteLine(Partituras.ListaPartituras[ContadorOpciones].Nom);
-                                    Console.ForegroundColor = ConsoleColor.White;
-                                    ContadorOpciones++;
-                                }
-                                ContadorOpciones = 0;
-
-                                ConsoleKeyInfo EntradaUsuario = Console.ReadKey();
-                                if ((EntradaUsuario.KeyChar == 'w')&&(Selector>0))
-                                {
-                                    Selector--;
-                                }
-                                if ((EntradaUsuario.KeyChar == 's')&& (Selector < dirs.Length-1))
-                                {
-                                    Selector++;
-                                }
-                                if (EntradaUsuario.Key == ConsoleKey.Spacebar)
-                                {
-                                    Seleccionado = true;
-                                }
-                            }
+                            Selector = 0;
+                            Selector = SeleccionMenu(dirs, Selector, Partituras);
 
                             Sortir = false;
                             j = 0;
@@ -144,177 +210,67 @@ namespace Esborrany_1
                             {
                                 while (I < beat.Length)
                                 {
-                                    Console.Clear();
 
-                                    Console.Write("    ");
-                                    while (i < beat.Length)
-                                    {
-                                        Console.Write("-");
-                                        i++;
-                                    }
-                                    Console.Write("\n");
-                                    i = 0;
+                                Console.Clear();
 
-                                    Console.Write("Si  ");
-                                    while (i < beat.Length)
-                                    {
-                                        if ((j == 0) && (k == i))
-                                        {
-                                            Console.ForegroundColor = ConsoleColor.Red;
-                                            Console.Write('X');
-                                            Console.ForegroundColor = ConsoleColor.White;
-                                        }
-                                        else if (beat[i] == "12")
-                                        {
-                                            Console.Write('o');
-                                        }
-                                        else
-                                            Console.Write(" ");
-                                        i++;
-                                    }
-                                    Console.Write("\n");
-                                    i = 0;
+                                Console.WriteLine("Usa las teclas W,A,S,D para desplazarte por el pentagrama. Edita la nota con la barra espaciadora. Pulsa Esc para salir sin guardar i G para guardar.");
 
-                                    Console.Write("La  ");
-                                    while (i < beat.Length)
-                                    {
-                                        if ((j == 1) && (k == i))
-                                        {
-                                            Console.ForegroundColor = ConsoleColor.Red;
-                                            Console.Write('X');
-                                            Console.ForegroundColor = ConsoleColor.White;
-                                        }
-                                        else if (beat[i] == "11")
-                                        {
-                                            Console.Write('#');
-                                        }
-                                        else if (beat[i] == "10")
-                                        {
-                                            Console.Write('o');
-                                        }
-                                        else
-                                            Console.Write("-");
-                                        i++;
-                                    }
-                                    Console.Write("\n");
-                                    i = 0;
+                                Console.Write("\n");
+                                Console.Write("\n");
 
-                                    Console.Write("Sol ");
-                                    while (i < beat.Length)
-                                    {
-                                        if ((j == 2) && (k == i))
-                                        {
-                                            Console.ForegroundColor = ConsoleColor.Red;
-                                            Console.Write('X');
-                                            Console.ForegroundColor = ConsoleColor.White;
-                                        }
-                                        else if (beat[i] == "9")
-                                        {
-                                            Console.Write('#');
-                                        }
-                                        else if (beat[i] == "8")
-                                        {
-                                            Console.Write('o');
-                                        }
-                                        else
-                                            Console.Write(" ");
-                                        i++;
-                                    }
-                                    Console.Write("\n");
-                                    i = 0;
+                                Console.Write("    ");
+                                while (i < beat.Length)
+                                {
+                                    Console.Write("-");
+                                    i++;
+                                }
+                                Console.Write("\n");
+                                i = 0;
 
-                                    Console.Write("Fa  ");
-                                    while (i < beat.Length)
-                                    {
-                                        if ((j == 3) && (k == i))
-                                        {
-                                            Console.ForegroundColor = ConsoleColor.Red;
-                                            Console.Write('X');
-                                            Console.ForegroundColor = ConsoleColor.White;
-                                        }
-                                        else if (beat[i] == "7")
-                                        {
-                                            Console.Write('#');
-                                        }
-                                        else if (beat[i] == "6")
-                                        {
-                                            Console.Write('o');
-                                        }
-                                        else
-                                            Console.Write("-");
-                                        i++;
-                                    }
-                                    Console.Write("\n");
-                                    i = 0;
+                                Console.Write("Si  ");
+                                NumNota_1 = "13";
+                                NumNota_2 = "12";
+                                J = 0;
+                                Partitura_Editar(beat,j,k,NumNota_1,NumNota_2,J);
 
-                                    Console.Write("Mi  ");
-                                    while (i < beat.Length)
-                                    {
-                                        if ((j == 4) && (k == i))
-                                        {
-                                            Console.ForegroundColor = ConsoleColor.Red;
-                                            Console.Write('X');
-                                            Console.ForegroundColor = ConsoleColor.White;
-                                        }
-                                        else if (beat[i] == "5")
-                                        {
-                                            Console.Write('o');
-                                        }
-                                        else
-                                            Console.Write(" ");
-                                        i++;
-                                    }
-                                    Console.Write("\n");
-                                    i = 0;
 
-                                    Console.Write("Re  ");
-                                    while (i < beat.Length)
-                                    {
-                                        if ((j == 5) && (k == i))
-                                        {
-                                            Console.ForegroundColor = ConsoleColor.Red;
-                                            Console.Write('X');
-                                            Console.ForegroundColor = ConsoleColor.White;
-                                        }
-                                        else if (beat[i] == "4")
-                                        {
-                                            Console.Write('#');
-                                        }
-                                        else if (beat[i] == "3")
-                                        {
-                                            Console.Write('o');
-                                        }
-                                        else
-                                            Console.Write("-");
-                                        i++;
-                                    }
-                                    Console.Write("\n");
-                                    i = 0;
+                                Console.Write("La  ");
+                                NumNota_1 = "11";
+                                NumNota_2 = "10";
+                                J = 1;
+                                Partitura_Editar(beat, j, k, NumNota_1, NumNota_2, J);
 
-                                    Console.Write("Do  ");
-                                    while (i < beat.Length)
-                                    {
-                                        if ((j == 6) && (k == i))
-                                        {
-                                            Console.ForegroundColor = ConsoleColor.Red;
-                                            Console.Write('X');
-                                            Console.ForegroundColor = ConsoleColor.White;
-                                        }
-                                        else if (beat[i] == "2")
-                                        {
-                                            Console.Write('#');
-                                        }
-                                        else if (beat[i] == "1")
-                                        {
-                                            Console.Write('o');
-                                        }
-                                        else
-                                            Console.Write(" ");
-                                        i++;
-                                    }
-                                    Console.Write("\n");
-                                    i = 0;
-                                    I++;
+                                Console.Write("Sol  ");
+                                NumNota_1 = "9";
+                                NumNota_2 = "8";
+                                J = 2;
+                                Partitura_Editar(beat, j, k, NumNota_1, NumNota_2, J);
+
+                                Console.Write("Fa  ");
+                                NumNota_1 = "7";
+                                NumNota_2 = "6";
+                                J = 3;
+                                Partitura_Editar(beat, j, k, NumNota_1, NumNota_2, J);
+
+                                Console.Write("Mi  ");
+                                NumNota_1 = "13";
+                                NumNota_2 = "5";
+                                J = 4;
+                                Partitura_Editar(beat, j, k, NumNota_1, NumNota_2, J);
+
+                                Console.Write("Re  ");
+                                NumNota_1 = "4";
+                                NumNota_2 = "3";
+                                J = 5;
+                                Partitura_Editar(beat, j, k, NumNota_1, NumNota_2, J);
+
+                                Console.Write("Do  ");
+                                NumNota_1 = "2";
+                                NumNota_2 = "1";
+                                J = 6;
+                                Partitura_Editar(beat, j, k, NumNota_1, NumNota_2, J);
+
+                                I++;
                                 }
                                 I = 0;
                                 ConsoleKeyInfo Moviment = Console.ReadKey();
@@ -458,38 +414,7 @@ namespace Esborrany_1
                         else
                         {
                             Selector = 0;
-                            ContadorOpciones = 0;
-                            Seleccionado = false;
-
-                            while (!Seleccionado)
-                            {
-                                Console.Clear();
-                                while (ContadorOpciones < dirs.Length)
-                                {
-                                    if (Selector == ContadorOpciones)
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                    }
-                                    Console.WriteLine(Partituras.ListaPartituras[ContadorOpciones].Nom);
-                                    Console.ForegroundColor = ConsoleColor.White;
-                                    ContadorOpciones++;
-                                }
-                                ContadorOpciones = 0;
-
-                                ConsoleKeyInfo EntradaUsuario = Console.ReadKey();
-                                if ((EntradaUsuario.KeyChar == 'w') && (Selector > 0))
-                                {
-                                    Selector--;
-                                }
-                                if ((EntradaUsuario.KeyChar == 's') && (Selector < dirs.Length - 1))
-                                {
-                                    Selector++;
-                                }
-                                if (EntradaUsuario.Key == ConsoleKey.Spacebar)
-                                {
-                                    Seleccionado = true;
-                                }
-                            }
+                            Selector = SeleccionMenu(dirs, Selector, Partituras);
 
                             Sortir = false;
                             j = 0;
@@ -499,17 +424,17 @@ namespace Esborrany_1
                             fila = X.ReadLine();
                             fila = X.ReadLine();
                             X.Close();
-                            string[] beat_2 = fila.Split('.');
+                            string[] beat = fila.Split('.');
 
-                            while (I<beat_2.Length)
+                            while (I< beat.Length)
                             {
                                 Console.Clear();
 
-                                Nota = Convert.ToInt32(beat_2[I]);
+                                Nota = Convert.ToInt32(beat[I]);
                                 Frecuencia = ObtenerFrecuencia(Nota,Octava);
 
                                 Console.Write("   ");
-                                while (i < beat_2.Length)
+                                while (i < beat.Length)
                                 {
                                     Console.Write("-");
                                     i++;
@@ -518,149 +443,62 @@ namespace Esborrany_1
                                 i = 0;
 
                                 Console.Write("Si ");
-                                while (i < beat_2.Length)
-                                {
-                                    if ((Nota == 12)&&(beat_2[i]=="12"))
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.Write('O');
-                                        Console.ForegroundColor = ConsoleColor.White;
-                                    }
-                                    else
-                                        Console.Write(" ");
-                                    i++;
-                                }
-                                Console.Write("\n");
-                                i = 0;
+                                J_1= 13;
+                                J_2 = 12;
+                                NumNota_1 = "13";
+                                NumNota_2 = "12";
+                                Espacio = true;
+                                Partitura_Reproducir(beat, I, Nota, NumNota_1, NumNota_2, J_1, J_2,Espacio);
 
-                                Console.Write("La ");
-                                while (i < beat_2.Length)
-                                {
-                                    if ((Nota == 11) && (beat_2[i] == "11") && (I == i))
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.Write('#');
-                                        Console.ForegroundColor = ConsoleColor.White;
-                                    }
-                                    else if ((Nota == 10) && (beat_2[i] == "10") && (I == i))
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.Write('O');
-                                        Console.ForegroundColor = ConsoleColor.White;
-                                    }
-                                    else
-                                        Console.Write("-");
-                                    i++;
-                                }
-                                Console.Write("\n");
-                                i = 0;
+                            Console.Write("La ");
+                            J_1 = 11;
+                            J_2 = 10;
+                            NumNota_1 = "11";
+                            NumNota_2 = "10";
+                            Espacio = false;
+                            Partitura_Reproducir(beat, I, Nota, NumNota_1, NumNota_2, J_1, J_2, Espacio);
 
-                                Console.Write("Sl ");
-                                while (i < beat_2.Length)
-                                {
-                                    if ((Nota == 9) && (beat_2[i] == "9") && (I == i))
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.Write('#');
-                                        Console.ForegroundColor = ConsoleColor.White;
-                                    }
-                                    else if ((Nota == 8) && (beat_2[i] == "8") && (I == i))
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.Write('O');
-                                        Console.ForegroundColor = ConsoleColor.White;
-                                    }
-                                    else
-                                        Console.Write(" ");
-                                    i++;
-                                }
-                                Console.Write("\n");
-                                i = 0;
+                            Console.Write("Sl ");
+                            J_1 = 9;
+                            J_2 = 8;
+                            NumNota_1 = "9";
+                            NumNota_2 = "8";
+                            Espacio = true;
+                            Partitura_Reproducir(beat, I, Nota, NumNota_1, NumNota_2, J_1, J_2, Espacio);
 
-                                Console.Write("Fa ");
-                                while (i < beat_2.Length)
-                                {
-                                    if ((Nota == 7) && (beat_2[i] == "7") && (I == i))
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.Write('#');
-                                        Console.ForegroundColor = ConsoleColor.White;
-                                    }
-                                    else if ((Nota == 6) && (beat_2[i] == "6") && (I == i))
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.Write('O');
-                                        Console.ForegroundColor = ConsoleColor.White;
-                                    }
-                                    else
-                                        Console.Write("-");
-                                    i++;
-                                }
-                                Console.Write("\n");
-                                i = 0;
+                            Console.Write("Fa ");
+                            J_1 = 7;
+                            J_2 = 6;
+                            NumNota_1 = "7";
+                            NumNota_2 = "6";
+                            Espacio = false;
+                            Partitura_Reproducir(beat, I, Nota, NumNota_1, NumNota_2, J_1, J_2, Espacio);
 
-                                Console.Write("Mi ");
-                                while (i < beat_2.Length)
-                                {
-                                    if ((Nota == 5) && (beat_2[i] == "5") && (I == i))
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.Write('O');
-                                        Console.ForegroundColor = ConsoleColor.White;
-                                    }
-                                    else
-                                        Console.Write(" ");
-                                    i++;
-                                }
-                                Console.Write("\n");
-                                i = 0;
+                            Console.Write("Mi ");
+                            J_1 = 13;
+                            J_2 = 5;
+                            NumNota_1 = "13";
+                            NumNota_2 = "5";
+                            Espacio = true;
+                            Partitura_Reproducir(beat, I, Nota, NumNota_1, NumNota_2, J_1, J_2, Espacio);
 
-                                Console.Write("Re ");
-                                while (i < beat_2.Length)
-                                {
-                                    if ((Nota == 4) && (beat_2[i] == "4") && (I == i))
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.Write('#');
-                                        Console.ForegroundColor = ConsoleColor.White;
-                                    }
-                                    else if ((Nota == 3) && (beat_2[i] == "3") && (I == i))
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.Write('O');
-                                        Console.ForegroundColor = ConsoleColor.White;
-                                    }
-                                    else
-                                        Console.Write("-");
-                                    i++;
-                                }
-                                Console.Write("\n");
-                                i = 0;
+                            Console.Write("Re ");
+                            J_1 = 4;
+                            J_2 = 3;
+                            NumNota_1 = "4";
+                            NumNota_2 = "3";
+                            Espacio = false;
+                            Partitura_Reproducir(beat, I, Nota, NumNota_1, NumNota_2, J_1, J_2, Espacio);
 
-                                Console.Write("Do ");
-                                while (i < beat_2.Length)
-                                {
-                                    if ((Nota == 2) && (beat_2[i] == "2")&&(I==i))
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.Write('#');
-                                        Console.ForegroundColor = ConsoleColor.White;
-                                    }
-                                    else if ((Nota == 1) && (beat_2[i] == "1") && (I == i))
-                                    {
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.Write('O');
-                                        Console.ForegroundColor = ConsoleColor.White;
-                                    }
-                                    else
-                                        Console.Write(" ");
-                                    i++;
-                                }
-                                Console.Write("\n");
+                            Console.Write("Do ");
+                            J_1 = 2;
+                            J_2 = 1;
+                            NumNota_1 = "2";
+                            NumNota_2 = "1";
+                            Espacio = true;
+                            Partitura_Reproducir(beat, I, Nota, NumNota_1, NumNota_2, J_1, J_2, Espacio);
 
-                                i = 0;
-
-                                if (Nota!=0)
+                            if (Nota!=0)
                                     Console.Beep((int)Frecuencia, bpm);
 
                                 I++;
@@ -677,7 +515,7 @@ namespace Esborrany_1
                         break;
                 }
                 Console.Clear();
-            }
+            //}
         }
     }
 }
