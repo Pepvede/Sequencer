@@ -35,14 +35,14 @@ namespace Esborrany_1
         {
             int i = 0;
 
-            //Escribe una sola línea del pentagrama (una sola nota)de longitud beat.Lenght
-            //  i = contador de columna de la partitura
-            //  j = Ubicación vertical del selector en el pentagrama
-            //  J = contador de fila del pentagrama
-            //  k = Ubicación horizontal del selector en el pentagrama
-            //  NumNota_1 = Código de las notas (sostenidas)
-            //  NumNota_2 = Código de las notas (normales)
-            //Para las notas que no tienen sostenido, NumNota_1=13
+            /*Escribe una sola línea del pentagrama (una sola nota)de longitud beat.Lenght
+              i = contador de columna de la partitura
+              j = Ubicación vertical del selector en el pentagrama
+              J = contador de fila del pentagrama
+              k = Ubicación horizontal del selector en el pentagrama
+              NumNota_1 = Código de las notas (sostenidas)
+              NumNota_2 = Código de las notas (normales)
+            Para las notas que no tienen sostenido, NumNota_1=13*/
             while (i < beat.Length)
             {
                 //Si las coordenadas del marcador coinciden con la actual, escribe el marcador
@@ -77,29 +77,26 @@ namespace Esborrany_1
         {
             int i = 0;
 
-            //Escribe una sola línea del pentagrama (una sola nota)de longitud beat.Lenght
-            //  i = contador de columna de la partitura
-            //  I = Posició horizontal de una sola nota en concreto
-            //  J_1 = Integral con el código de las notas (sostenidas)
-            //  J_2 = Integral con el código de las notas (normales)
-            //  NumNota_1 = String con el código de las notas (sostenidas)
-            //  NumNota_2 = String con el código de las notas (normales)
-            //Para las notas que no tienen sostenido, NumNota_1=13
-            //  Nota = Código de la nota con la que se está trabajando
-            //  Espacio = booleana para saber si, en caso de no haber nota en esa posición,
-            //  debe escribirse guión o espacio.
+            /*Escribe una sola línea del pentagrama(una sola nota)de longitud beat.Lenght
+              i = contador de columna de la partitura
+              I = Posició horizontal de una sola nota en concreto
+              J_1 = Integral con el código de las notas(sostenidas)
+              J_2 = Integral con el código de las notas(normales)
+              NumNota_1 = String con el código de las notas(sostenidas)
+              NumNota_2 = String con el código de las notas(normales)
+            Para las notas que no tienen sostenido, NumNota_1 = 13
+              Nota = Código de la nota con la que se está trabajando
+              Espacio = booleana para saber si, en caso de no haber nota en esa posición, debe escribirse guión o espacio.*/
             while (i < beat.Length)
             {
-                //Si la nota que se está tratando es sostenida y se encuentra en la posición
-                //actual, escribe #
+                //Si la nota que se está tratando es sostenida y se encuentra en la posición actual, escribe #
                 if ((Nota == J_1) && (beat[i] == NumNota_1) && (I == i))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write('#');
                     Console.ForegroundColor = ConsoleColor.White;
                 }
-                //Si la nota que se está tratando es normal y se encuentra en la posición
-                //actual, escribe O
+                //Si la nota que se está tratando es normal y se encuentra en la posición actual, escribe O
                 else if ((Nota == J_2) && (beat[i] == NumNota_2) && (I == i))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
@@ -126,6 +123,7 @@ namespace Esborrany_1
             while (!Seleccionado)
             {
                 Console.Clear();
+                Console.WriteLine("Usa las flechas para desplazarte y espacio para seleccionar. Pulsa Esc para salir del manú.\n");
                 while (ContadorOpciones < dirs.Length)
                 {
                     if (Selector == ContadorOpciones)
@@ -139,17 +137,16 @@ namespace Esborrany_1
                 ContadorOpciones = 0;
 
                 ConsoleKeyInfo EntradaUsuario = Console.ReadKey();
-                if ((EntradaUsuario.KeyChar == 'w') && (Selector > 0))
-                {
+                if ((EntradaUsuario.Key == ConsoleKey.UpArrow) && (Selector > 0))
                     Selector--;
-                }
-                if ((EntradaUsuario.KeyChar == 's') && (Selector < dirs.Length - 1))
-                {
+                if ((EntradaUsuario.Key==ConsoleKey.DownArrow) && (Selector < dirs.Length - 1))
                     Selector++;
-                }
                 if (EntradaUsuario.Key == ConsoleKey.Spacebar)
+                    Seleccionado = true;
+                if (EntradaUsuario.Key == ConsoleKey.Escape)
                 {
                     Seleccionado = true;
+                    Selector = -1;
                 }
             }
             return (Selector);
@@ -239,7 +236,8 @@ namespace Esborrany_1
                         {
                             Selector = 0;
                             Selector = SeleccionMenu(dirs, Selector, Partituras);
-
+                            if (Selector == -1)
+                                break;
                             Sortir = false;
                             j = 0;
                             k = 0;
@@ -256,7 +254,7 @@ namespace Esborrany_1
                                 {
                                     Console.Clear();
 
-                                    Console.WriteLine("Usa las teclas W,A,S,D para desplazarte por el pentagrama. Edita la nota con la barra espaciadora. Pulsa Esc para salir sin guardar i G para guardar.");
+                                    Console.WriteLine("Usa las flechas para desplazarte y la barra espaciadora para editar la nota. Pulsa Esc para salir sin guardar i G para guardar.");
                                     Console.Write("\n");
                                     Console.Write("\n");
 
@@ -275,20 +273,16 @@ namespace Esborrany_1
                                     {
                                         //Escribe el nombre de la nota de la fila i
                                         Console.Write(NombresDeLasNotas[i]);
-                                        //Si la nota es superior al Mi, el código de la
-                                        //nota sostenida es igual a...
+                                        //Si la nota es superior al Mi, el código de la nota sostenida es igual a...
                                         if(i<5)
                                             NumNota_1 = Convert.ToString(13-(2*i));
-                                        //Si la nota es inferior al Mi, el código de la
-                                        //nota sostenida es igual a...
+                                        //Si la nota es inferior al Mi, el código de la nota sostenida es igual a...
                                         else
                                             NumNota_1 = Convert.ToString(13 - (2 * i)+1);
-                                        //El código de la nota normal menor en 1 al código
-                                        //de la sostenida
+                                        //El código de la nota normal menor en 1 al código de la sostenida
                                         NumNota_2 = Convert.ToString(
                                             Int32.Parse(NumNota_1)-1);
-                                        //Si la nota es mi, los valores se tienen que
-                                        //especificar (para evitar un error)
+                                        //Si la nota es mi, los valores se tienen que especificar (para evitar un error)
                                         if (NombresDeLasNotas[i] == "Mi  ")
                                         {
                                             NumNota_1 = "13";
@@ -303,22 +297,14 @@ namespace Esborrany_1
                                 }
                                 I = 0;
                                 ConsoleKeyInfo Moviment = Console.ReadKey();
-                                if ((Moviment.KeyChar == 'a') && (k > 0))
-                                {
+                                if ((Moviment.Key == ConsoleKey.LeftArrow) && (k > 0))
                                     k--;
-                                }
-                                if ((Moviment.KeyChar == 'd') && (k < beat.Length - 1))
-                                {
+                                if ((Moviment.Key == ConsoleKey.RightArrow) && (k < beat.Length - 1))
                                     k++;
-                                }
-                                if ((Moviment.KeyChar == 'w') && (j > 0))
-                                {
+                                if ((Moviment.Key == ConsoleKey.UpArrow) && (j > 0))
                                     j--;
-                                }
-                                if ((Moviment.KeyChar == 's') && (j < 6))
-                                {
+                                if ((Moviment.Key == ConsoleKey.DownArrow) && (j < 6))
                                     j++;
-                                }
                                 if (Moviment.Key == ConsoleKey.Spacebar)
                                 {
                                     switch (j)
@@ -444,6 +430,12 @@ namespace Esborrany_1
                         {
                             Selector = 0;
                             Selector = SeleccionMenu(dirs, Selector, Partituras);
+                            if (Selector == -1)
+                                break;
+
+                            Console.Clear();
+                            Console.WriteLine("Indica la velocidad de reproducción y pulsa Enter. Un menor número implica una mayor velocidad y viceversa. Se recomienda un valor de 300.");
+                            bpm = Convert.ToInt32(Console.ReadLine());
 
                             Sortir = false;
                             j = 0;
@@ -462,7 +454,7 @@ namespace Esborrany_1
                                 Nota = Convert.ToInt32(beat[I]);
                                 Frecuencia = ObtenerFrecuencia(Nota,Octava);
 
-                                Console.Write("   ");
+                                Console.Write("    ");
                                 while (i < beat.Length)
                                 {
                                     Console.Write("-");
@@ -471,7 +463,7 @@ namespace Esborrany_1
                                 Console.Write("\n");
                                 i = 0;
 
-                                Console.Write("Si ");
+                                Console.Write("Si  ");
                                 J_1= 13;
                                 J_2 = 12;
                                 NumNota_1 = "13";
@@ -479,58 +471,58 @@ namespace Esborrany_1
                                 Espacio = true;
                                 Partitura_Reproducir(beat, I, Nota, NumNota_1, NumNota_2, J_1, J_2,Espacio);
 
-                            Console.Write("La ");
-                            J_1 = 11;
-                            J_2 = 10;
-                            NumNota_1 = "11";
-                            NumNota_2 = "10";
-                            Espacio = false;
-                            Partitura_Reproducir(beat, I, Nota, NumNota_1, NumNota_2, J_1, J_2, Espacio);
+                                Console.Write("La  ");
+                                J_1 = 11;
+                                J_2 = 10;
+                                NumNota_1 = "11";
+                                NumNota_2 = "10";
+                                Espacio = false;
+                                Partitura_Reproducir(beat, I, Nota, NumNota_1, NumNota_2, J_1, J_2, Espacio);
 
-                            Console.Write("Sl ");
-                            J_1 = 9;
-                            J_2 = 8;
-                            NumNota_1 = "9";
-                            NumNota_2 = "8";
-                            Espacio = true;
-                            Partitura_Reproducir(beat, I, Nota, NumNota_1, NumNota_2, J_1, J_2, Espacio);
+                                Console.Write("Sol ");
+                                J_1 = 9;
+                                J_2 = 8;
+                                NumNota_1 = "9";
+                                NumNota_2 = "8";
+                                Espacio = true;
+                                Partitura_Reproducir(beat, I, Nota, NumNota_1, NumNota_2, J_1, J_2, Espacio);
 
-                            Console.Write("Fa ");
-                            J_1 = 7;
-                            J_2 = 6;
-                            NumNota_1 = "7";
-                            NumNota_2 = "6";
-                            Espacio = false;
-                            Partitura_Reproducir(beat, I, Nota, NumNota_1, NumNota_2, J_1, J_2, Espacio);
+                                Console.Write("Fa  ");
+                                J_1 = 7;
+                                J_2 = 6;
+                                NumNota_1 = "7";
+                                NumNota_2 = "6";
+                                Espacio = false;
+                                Partitura_Reproducir(beat, I, Nota, NumNota_1, NumNota_2, J_1, J_2, Espacio);
 
-                            Console.Write("Mi ");
-                            J_1 = 13;
-                            J_2 = 5;
-                            NumNota_1 = "13";
-                            NumNota_2 = "5";
-                            Espacio = true;
-                            Partitura_Reproducir(beat, I, Nota, NumNota_1, NumNota_2, J_1, J_2, Espacio);
+                                Console.Write("Mi  ");
+                                J_1 = 13;
+                                J_2 = 5;
+                                NumNota_1 = "13";
+                                NumNota_2 = "5";
+                                Espacio = true;
+                                Partitura_Reproducir(beat, I, Nota, NumNota_1, NumNota_2, J_1, J_2, Espacio);
 
-                            Console.Write("Re ");
-                            J_1 = 4;
-                            J_2 = 3;
-                            NumNota_1 = "4";
-                            NumNota_2 = "3";
-                            Espacio = false;
-                            Partitura_Reproducir(beat, I, Nota, NumNota_1, NumNota_2, J_1, J_2, Espacio);
+                                Console.Write("Re  ");
+                                J_1 = 4;
+                                J_2 = 3;
+                                NumNota_1 = "4";
+                                NumNota_2 = "3";
+                                Espacio = false;
+                                Partitura_Reproducir(beat, I, Nota, NumNota_1, NumNota_2, J_1, J_2, Espacio);
 
-                            Console.Write("Do ");
-                            J_1 = 2;
-                            J_2 = 1;
-                            NumNota_1 = "2";
-                            NumNota_2 = "1";
-                            Espacio = true;
-                            Partitura_Reproducir(beat, I, Nota, NumNota_1, NumNota_2, J_1, J_2, Espacio);
+                                Console.Write("Do  ");
+                                J_1 = 2;
+                                J_2 = 1;
+                                NumNota_1 = "2";
+                                NumNota_2 = "1";
+                                Espacio = true;
+                                Partitura_Reproducir(beat, I, Nota, NumNota_1, NumNota_2, J_1, J_2, Espacio);
 
-                            if (Nota!=0)
-                                    Console.Beep((int)Frecuencia, bpm);
+                                if (Nota!=0)
+                                        Console.Beep((int)Frecuencia, bpm);
 
-                            I++;
+                                I++;
                             }
                         }
 
