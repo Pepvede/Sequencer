@@ -161,6 +161,7 @@ namespace Esborrany_1
             double Frecuencia = 0;
             string ID, Nom, fila, NumNota_1, NumNota_2;
             bool Sortir = false, SalirDelPrograma=false, Espacio=false;
+            string[] NombresDeLasNotas = new string[] { "Si  ", "La  ", "Sol ", "Fa  ", "Mi  ", "Re  ", "Do  " };
 
             CListaPartituras Partituras = new CListaPartituras();
             Partituras.ListaPartituras = new CPartitura[100];
@@ -253,67 +254,52 @@ namespace Esborrany_1
                             {
                                 while (I < beat.Length)
                                 {
+                                    Console.Clear();
 
-                                Console.Clear();
+                                    Console.WriteLine("Usa las teclas W,A,S,D para desplazarte por el pentagrama. Edita la nota con la barra espaciadora. Pulsa Esc para salir sin guardar i G para guardar.");
+                                    Console.Write("\n");
+                                    Console.Write("\n");
 
-                                Console.WriteLine("Usa las teclas W,A,S,D para desplazarte por el pentagrama. Edita la nota con la barra espaciadora. Pulsa Esc para salir sin guardar i G para guardar.");
+                                    Console.Write("    ");
+                                    while (i < beat.Length)
+                                    {
+                                        Console.Write("-");
+                                        i++;
+                                    }
+                                    Console.Write("\n");
+                                    i = 0;
 
-                                Console.Write("\n");
-                                Console.Write("\n");
-
-                                Console.Write("    ");
-                                while (i < beat.Length)
-                                {
-                                    Console.Write("-");
-                                    i++;
-                                }
-                                Console.Write("\n");
-                                i = 0;
-
-                                Console.Write("Si  ");
-                                NumNota_1 = "13";
-                                NumNota_2 = "12";
-                                J = 0;
-                                Partitura_Editar(beat,j,k,NumNota_1,NumNota_2,J);
-
-
-                                Console.Write("La  ");
-                                NumNota_1 = "11";
-                                NumNota_2 = "10";
-                                J = 1;
-                                Partitura_Editar(beat, j, k, NumNota_1, NumNota_2, J);
-
-                                Console.Write("Sol ");
-                                NumNota_1 = "9";
-                                NumNota_2 = "8";
-                                J = 2;
-                                Partitura_Editar(beat, j, k, NumNota_1, NumNota_2, J);
-
-                                Console.Write("Fa  ");
-                                NumNota_1 = "7";
-                                NumNota_2 = "6";
-                                J = 3;
-                                Partitura_Editar(beat, j, k, NumNota_1, NumNota_2, J);
-
-                                Console.Write("Mi  ");
-                                NumNota_1 = "13";
-                                NumNota_2 = "5";
-                                J = 4;
-                                Partitura_Editar(beat, j, k, NumNota_1, NumNota_2, J);
-
-                                Console.Write("Re  ");
-                                NumNota_1 = "4";
-                                NumNota_2 = "3";
-                                J = 5;
-                                Partitura_Editar(beat, j, k, NumNota_1, NumNota_2, J);
-
-                                Console.Write("Do  ");
-                                NumNota_1 = "2";
-                                NumNota_2 = "1";
-                                J = 6;
-                                Partitura_Editar(beat, j, k, NumNota_1, NumNota_2, J);
-
-                                I++;
+                                    //Mientras que el contar sea menor que la cantidad
+                                    //de notas...
+                                    while (i < NombresDeLasNotas.Length)
+                                    {
+                                        //Escribe el nombre de la nota de la fila i
+                                        Console.Write(NombresDeLasNotas[i]);
+                                        //Si la nota es superior al Mi, el código de la
+                                        //nota sostenida es igual a...
+                                        if(i<5)
+                                            NumNota_1 = Convert.ToString(13-(2*i));
+                                        //Si la nota es inferior al Mi, el código de la
+                                        //nota sostenida es igual a...
+                                        else
+                                            NumNota_1 = Convert.ToString(13 - (2 * i)+1);
+                                        //El código de la nota normal menor en 1 al código
+                                        //de la sostenida
+                                        NumNota_2 = Convert.ToString(
+                                            Int32.Parse(NumNota_1)-1);
+                                        //Si la nota es mi, los valores se tienen que
+                                        //especificar (para evitar un error)
+                                        if (NombresDeLasNotas[i] == "Mi  ")
+                                        {
+                                            NumNota_1 = "13";
+                                            NumNota_2 = "5";
+                                        }
+                                        J = i;
+                                        Partitura_Editar(beat, j, k, NumNota_1, NumNota_2, J);
+                                        i++;    
+                                    }
+                                    i = 0;
+                                    I++;
                                 }
                                 I = 0;
                                 ConsoleKeyInfo Moviment = Console.ReadKey();
